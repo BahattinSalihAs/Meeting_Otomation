@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+<h2>Register</h2>
+<form method="POST" id="registerForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+    <label for="accountId">Account ID:</label>
+    <input type="text" id="accountId" name="accountId" required><br><br>
+    <label for="clientId">Client ID:</label>
+    <input type="text" id="clientId" name="clientId" required><br><br>
+    <label for="clientSecret">Client Secret:</label>
+    <input type="text" id="clientSecret" name="clientSecret" required><br><br>
+    <button type="submit">Register</button>
+</form>
+<br>
+<a href="/zoom/login">Already have an account? Login here</a>
+<script>
+    document.getElementById("registerForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+        });
+
+        const response = await fetch('/zoom/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formObject),
+        });
+
+        if (response.status === 200) {
+            window.location.href = '/zoom/login';
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Zoom Meeting</title>
+</head>
+<body>
+
+<h2>Create Zoom Meeting</h2>
+<form id="meetingForm">
+    <label for="email">Token Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="agenda">Toplantı Gündemi:</label>
+    <input type="text" id="agenda" name="agenda" value="My Meeting"><br><br>
+
+    <label for="default_password">Toplantıya katılırken şifre zorunlu mu?</label>
+    <input type="checkbox" id="default_password" name="default_password"><br><br>
+
+    <label for="duration">Toplantı süresi(dakika):</label>
+    <input type="number" id="duration" name="duration" value="60"><br><br>
+
+    <label for="password">Toplantı Şifresi:</label>
+    <input type="text" id="password" name="password" value="*******"><br><br>
+
+    <label for="pre_schedule">Toplantı tarihli şekilde mi oluşturulsun? (Recurring toplantılar için bu işaretli olmalı)</label>
+    <input type="checkbox" id="pre_schedule" name="pre_schedule"><br><br>
+
+    <label for="schedule_for">Toplantı kimin adına planlanıyor:</label>
+    <input type="text" id="schedule_for" name="schedule_for" value="example@mail.com" required><br><br>
+
+
+    <!-- Settings -->
+    <h3>Genel Ayarlar</h3>
+
+    <!-- Allow Multiple Devices -->
+    <label for="allow_multiple_devices">Toplantıya aynı anda birden fazla cihaz katılabilsin:</label>
+    <input type="checkbox" id="allow_multiple_devices" name="settings[allow_multiple_devices]" checked><br><br>
+
+    <!-- Alternative Hosts -->
+    <label for="alternative_hosts">Toplantıya ev sahipliği yapacak alternatif kullanıcılar(Optional) (comma separated emails):</label>
+    <input type="text" id="alternative_hosts" name="settings[alternative_hosts]" value="jchill@example.com;thill@example.com"><br><br>
+
+    <!-- Alternative Hosts Email Notification -->
+    <label for="alternative_hosts_email_notification">Toplantıya ev sahipliği yapacak alternatif kullanıcılara mail ile davetiye gitsin:</label>
+    <input type="checkbox" id="alternative_hosts_email_notification" name="settings[alternative_hosts_email_notification]" checked><br><br>
+
+    <label for="authentication_domains">Otomatik katılım sağlayacak domainler (comma separated, e.g. example.com):</label>
+    <input type="text" id="authentication_domains" name="settings[authentication_domains]" value="example.com"><br><br>
+
+    <h3>Otomatik Katılım domainine sahip olmayan maillerin muaf olanları</h3>
+    <div id="exceptionList">
+        <div class="exceptionItem">
+            <label for="exception_email">Email:</label>
+            <input type="email" id="exception_email" class="exception_email" name="settings[authentication_exception][email]" value="jchill@example.com"><br><br>
+
+            <label for="exception_name">Name:</label>
+            <input type="text" id="exception_name" class="exception_name" name="settings[authentication_exception][name]" value="Jill Chill"><br><br>
+        </div>
+    </div>
+    <button type="button" onclick="addException()">Add Another Exception</button><br><br>
+
+
+    <!-- Auto Recording -->
+    <label for="auto_recording">Otomatik Ekran Kaydı:</label>
+    <select id="auto_recording" name="settings[auto_recording]">
+        <option value="none">None</option>
+        <option value="cloud" selected>Cloud</option>
+        <option value="local">Local</option>
+    </select><br><br>
+
+    <h3>İletişim Bilgileri</h3>
+    <label for="contact_email">İletişim(Rapor) Email:</label>
+    <input type="email" id="contact_email" name="settings[contact_email]" value="jchill@example.com"><br><br>
+
+    <label for="contact_name">İletişim Adı:</label>
+    <input type="text" id="contact_name" name="settings[contact_name]" value="Jill Chill"><br><br><br>
+
+    <label for="jbh_time">Katılımcılar ev sahibi toplantıya katılmadan kaç dakika önce toplantıya katılabilirler (minutes):</label>
+    <input type="number" id="jbh_time" name="jbh_time" value="10" min="0"><br><br>
+
+    <label for="join_before_host">Katılımcılar ev sahibi toplantıya katılmadan toplantıya katılabilsinler:</label>
+    <input type="checkbox" id="join_before_host" name="join_before_host" checked><br><br>
+
+    <h3>Soru/Cevap Ayarları</h3>
+    <label for="enable_qa">Katılımcılar soru sorabilir ve cevap alabilirler:</label>
+    <input type="checkbox" id="enable_qa" name="question_and_answer[enable]" checked><br><br>
+
+    <label for="allow_submit_questions">Katılımcılar soru gönderebilir:</label>
+    <input type="checkbox" id="allow_submit_questions" name="question_and_answer[allow_submit_questions]" checked><br><br>
+
+    <label for="question_visibility">Soruları Kim Görebilir:</label>
+    <select id="question_visibility" name="question_and_answer[question_visibility]">
+        <option value="all" selected>Tüm kullanıcılar</option>
+        <option value="host">Sadece ev sahibi</option>
+    </select><br><br>
+
+    <label for="meeting_authentication">Katılım için kimlik doğrulama gerekli mi?(Sadece zoom hesabı olanlar girebilir gibi) (Require Zoom login to join):</label>
+    <input type="checkbox" id="meeting_authentication" name="meeting_authentication" checked><br><br>
+
+    <h3>Toplantı Katılımcıları</h3>
+    <div id="inviteesList">
+        <div class="inviteeItem">
+            <label for="invitee_email">Katılımcı Email:</label>
+            <input type="email" id="invitee_email" class="invitee_email" name="meeting_invitees[0][email]" value="jchill@example.com"><br><br>
+        </div>
+    </div>
+    <button type="button" onclick="addInvitee()">Başka Kullanıcı Ekle</button><br><br>
+
+    <label for="waiting_room">Katılımcılar toplantı başlamadan lobide beklemeli mi?:</label>
+    <input type="checkbox" id="waiting_room" name="waiting_room" checked><br><br>
+
+    <label for="continuous_meeting_chat">Toplantıda mesajlaşma açık:</label>
+    <input type="checkbox" id="continuous_meeting_chat" name="continuous_meeting_chat[enable]" checked><br><br>
+
+    <label for="who_is_added">Kimler mesaj yazabilir:</label>
+    <select id="who_is_added" name="continuous_meeting_chat[who_is_added]">
+        <option value="all_users" selected>Tüm kullanıcılar</option>
+        <option value="host_only">Sadece ev sahibi</option>
+    </select><br><br>
+
+
+    <label for="auto_start_meeting_summary">Toplantı bittikten sonra özeti otomatik başlatılsın:</label>
+    <input type="checkbox" id="auto_start_meeting_summary" name="auto_start_meeting_summary" checked><br><br>
+
+    <label for="who_will_receive_summary">Toplantı özetini kim alacak?</label>
+    <select id="who_will_receive_summary" name="who_will_receive_summary">
+        <option value="1" selected>Sadece ev sahibi</option>
+        <option value="2">Sadece katılımcılar</option>
+        <option value="3">Ev sahibi ve katılımcılar</option>
+    </select><br><br>
+
+    <label for="auto_start_ai_companion_questions">AI destekli soru/cevap otomatik başlasın:</label>
+    <input type="checkbox" id="auto_start_ai_companion_questions" name="auto_start_ai_companion_questions" checked><br><br>
+
+    <label for="who_can_ask_questions">Toplantıda kimler soru sorabilir?</label>
+    <select id="who_can_ask_questions" name="who_can_ask_questions">
+        <option value="1" selected>Sadece Katılımcılar</option>
+        <option value="2">Ev sahibi ve katılımcılar</option>
+    </select><br><br>
+
+    <label for="start_time">Toplantı Başlangıç Zamanı (ISO 8601 format):</label>
+    <input type="datetime-local" id="start_time" name="start_time" value="2025-08-03T23:00:00"><br><br>
+
+    <label for="timezone">Zaman Dilimi:</label>
+    <select id="timezone" name="timezone">
+        <option value="America/Los_Angeles">America/Los_Angeles</option>
+        <option value="Europe/Istanbul" selected>Europe/Istanbul</option>
+        <option value="Asia/Tokyo">Asia/Tokyo</option>
+        <!-- Diğer zaman dilimleri buraya eklenebilir -->
+    </select><br><br>
+
+    <label for="topic">Toplantı Konusu:</label>
+    <input type="text" id="topic" name="topic" value="My Meeting"><br><br>
+
+    <label for="meet_type">Toplantı Türü:</label>
+    <select id="meet_type" name="meet_type">
+        <option value="1" selected>Anlık Toplantı (Instant Meeting)</option>
+        <option value="2">Zamanlanmış Toplantı (Scheduled Meeting)</option>
+    </select><br><br>
+
+    <button type="submit">Generate Zoom Meeting</button>
+</form>
+
+<div id="responseMessage" style="display: none; color: green;">
+    <p></p>
+</div>
+
+<!-- Hata mesajları için eklenen div -->
+<div id="errorMessage" style="display: none; color: red;">
+    <p>Error: Unable to retrieve token. Please try again later.</p>
+</div>
+
+<script>
+    function addException() {
+        const newException = document.createElement('div');
+        newException.classList.add('exceptionItem');
+        newException.innerHTML = `
+            <label for="exception_email">Email:</label>
+            <input type="email" class="exception_email" name="settings[authentication_exception][email]" value=""><br><br>
+            <label for="exception_name">Name:</label>
+            <input type="text" class="exception_name" name="settings[authentication_exception][name]" value=""><br><br>
+        `;
+        document.getElementById('exceptionList').appendChild(newException);
+    }
+
+    // Function to add additional invitees dynamically
+    let inviteeCount = 1;
+    function addInvitee() {
+        const newInvitee = document.createElement('div');
+        newInvitee.classList.add('inviteeItem');
+        newInvitee.innerHTML = `
+            <label for="invitee_email">Katılımcı Email:</label>
+            <input type="email" class="invitee_email" name="meeting_invitees[${inviteeCount}][email]" value=""><br><br>
+        `;
+        document.getElementById('inviteesList').appendChild(newInvitee);
+        inviteeCount++;
+    }
+
+    document.getElementById("meetingForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const startTimeLocal = document.getElementById("start_time").value;  // Yerel saat dilimindeki tarih
+        const startTimeUTC = new Date(startTimeLocal).toISOString();  // UTC'ye dönüştür
+
+        const isDefaultPassword = document.getElementById("default_password").checked; // true/false
+        const isPreSchedule = document.getElementById("pre_schedule").checked;
+        const isAllowMultipleDevices = document.getElementById("allow_multiple_devices").checked;
+        const isAlternativeHostsEmailNotification = document.getElementById("alternative_hosts_email_notification").checked;
+        const isJoinBeforeHost = document.getElementById("join_before_host").checked;
+        const isEnable =  document.getElementById("enable_qa").checked;
+        const isAllowSubmitQuestions = document.getElementById("allow_submit_questions").checked;
+        const isMeetingAuthentication =  document.getElementById("meeting_authentication").checked;
+        const isWaitingRoom = document.getElementById("waiting_room").checked;
+        const isChatEnabled = document.getElementById("continuous_meeting_chat").checked;
+        const isAutoSartMeetingSummary = document.getElementById("auto_start_meeting_summary").checked;
+        const isAutoStartAiCompanionQuestions = document.getElementById("auto_start_ai_companion_questions").checked;
+
+        const formData = new FormData(event.target);
+
+        const email = document.getElementById("email").value;
+
+        try {
+            const userDataResponse = await fetch(`/zoom/getUserData?email=${email}`);
+            const userData = await userDataResponse.json();
+
+            if (!userData || !userData.accountId || !userData.clientId || !userData.clientSecret) {
+                alert("Invalid user data or user does not exist.");
+                return;
+            }
+
+            // Backend'den alınan verilerle POST isteğini yapalım
+            const tokenResponse = await fetch("/zoom/getToken",
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({email})
+                });
+
+            const responseText = await tokenResponse.text();
+
+            if(!responseText) {
+                showErrorMessage("No response from the server.");
+                 return;
+            }
+
+            let tokenData;
+            try {
+                tokenData = JSON.parse(responseText);
+            }catch(e) {
+                showErrorMessage("Failed to parse response: " + e.message);
+                return;
+            }
+
+            if(!tokenResponse.ok) {
+                alert("Failed to get token from backend.");
+            }
+
+            const meetingData = {
+                agenda: formData.get("agenda"),
+                default_password: isDefaultPassword,
+                duration: parseInt(formData.get("duration")),
+                password: formData.get("password"),
+                pre_schedule: isPreSchedule,
+                schedule_for: formData.get("schedule_for"),
+                settings: {
+                    allow_multiple_devices: isAllowMultipleDevices,
+                    alternative_hosts: formData.get("settings[alternative_host]"),
+                    alternative_hosts_email_notification: isAlternativeHostsEmailNotification,
+                    audio: "both",
+                    authentication_domains: formData.get("settings[authentication_domains]"),
+                    /*
+                    authentication_exception: Array.from(document.querySelectorAll('.exceptionItem')).map(item => ({
+                        email: item.querySelector('.exception_email').value,
+                        name: item.querySelector('.exception_name').value
+                    })),
+                     */
+                    auto_recording: formData.get("settings[auto_recording]"),
+                    contact_email: formData.get("settings[contact_email]"),
+                    contact_name: formData.get("settings[contact_name]"),
+                    jbh_time: parseInt(formData.get("jbh_time")),
+                    join_before_host: isJoinBeforeHost,
+                    question_and_answer: {
+                        enable:isEnable,
+                        allow_submit_questions: isAllowSubmitQuestions,
+                        question_visibility: formData.get("question_and_answer[question_visibility]")
+                    },
+                    meeting_authentication: isMeetingAuthentication,
+                    meeting_invitees: Array.from(document.querySelectorAll('.invitee_email')).map(input => ({ email: input.value })),
+                    waiting_room: isWaitingRoom,
+                    continuous_meeting_chat: {
+                        enable: isChatEnabled,
+                        who_is_added: formData.get("continuous_meeting_chat[who_is_added]")
+                    },
+                    auto_start_meeting_summary:  isAutoSartMeetingSummary,
+                    who_will_receive_summary: parseInt(formData.get("who_will_receive_summary")),
+                    auto_start_ai_companion_questions: isAutoStartAiCompanionQuestions,
+                    who_can_ask_questions: parseInt(formData.get('who_can_ask_questions')),
+                },
+                timezone: formData.get("timezone"),
+                topic: formData.get("topic"),
+                type: parseInt(formData.get("meet_type")),
+                start_time: startTimeUTC.split(".")[0] + "Z",
+            };
+            console.log("JOIN BEFORE HOST: ", isJoinBeforeHost);
+            console.log("START TIME: ", startTimeUTC);
+            console.log("Meeting invitees:", Array.from(document.querySelectorAll('.invitee_email')).map(input => ({ email: input.value })));
+            console.log("Meeting Data to be sent: ", meetingData);
+            console.log("Sending request to backend with token:", tokenData.access_token);
+            const response = await fetch("/zoom/createMeeting?token=" + tokenData.access_token, {
+                method: "POST",
+                headers: {
+                    "Content-Type":  "application/json"
+                },
+                body: JSON.stringify(meetingData)
+            });
+            console.log("Response status:", response.status);  // Yanıtın durumunu kontrol edin
+            console.log("Response body:", await response.text());
+            if (tokenData && tokenData.access_token) {
+                // Token başarıyla alındı, token'ı gösterelim
+                document.getElementById("tokenResult").style.display = "block";
+                document.getElementById("token").textContent = tokenData.access_token; //token burada
+                document.getElementById("errorMessage").style.display = "none"; // Hata mesajını temizle
+            } else {
+                showErrorMessage("Failed to retrieve token. Please try again.");
+            }
+
+
+        }catch (error) {
+            showErrorMessage("An error occurred: " + error.message);
+        }
+    });
+    function showErrorMessage(message) {
+        document.getElementById("errorMessage").style.display = "block";
+        document.getElementById("errorMessage").textContent = message;
+        document.getElementById("responseMessage").style.display = "none"; // Token kısmını gizle
+    }
+</script>
+
+
+</body>
+</html>
